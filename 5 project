@@ -1,0 +1,444 @@
+import { len } from './len.js'
+
+export function endsWith(str, search) {
+  if (typeof str !== 'string' || typeof search !== 'string') {
+    throw new TypeError('Аргументы должны быть строками!');
+  }
+
+  if (search === '') {
+    return true;
+  }
+
+  const strLen = len(str);
+  const searchLen = len(search);
+
+  if (searchLen > strLen) {
+    return false;
+  }
+
+  const start = strLen - searchLen;
+
+  for (let j = 0; j < searchLen; j++) {
+    if (str[start + j] !== search[j]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+import { endsWith } from './ends-with.js'
+
+describe('Тесты endsWith', () => {
+test('Должна вернуть true для одного символа', () => {
+expect(endsWith('hello','o')).toBe(true);
+    });
+
+test('Должна вернуть true для подстроки', () => {
+expect(endsWith('hello','llo')).toBe(true);
+    });
+
+test('Должна вернуть false для несовпадающего вхождения', () => {
+expect(endsWith('hello','ell')).toBe(false);
+    });
+
+test('Должна вернуть true для пустой поисковой строки', () => {
+expect(endsWith('hello','')).toBe(true);
+    });
+
+test('Должна вернуть false если поисковая строка длиннее', () => {
+expect(endsWith('hell','hello')).toBe(false);
+    });
+
+test('Должна вернуть true для точного совпадения', () => {
+expect(endsWith('abc','abc')).toBe(true);
+    });
+
+test('Должна выбросить TypeError если первый аргумент не строка', () => {
+expect(() => endsWith(123, 'hello')).toThrow(TypeError)
+});
+
+test('Должна выбросить TypeError если второй аргумент не строка', () => {
+expect(() => endsWith('hello', 123)).toThrow(TypeError)
+});
+
+})
+
+import { len } from './len.js';
+
+export function includes(str, search) {
+  if (typeof str !== 'string' || typeof search !== 'string') {
+    throw new TypeError('Аргументы должны быть строками!');
+  }
+  if (search === '' || len(search) > len(str)) return search === '';
+
+  const strLen = len(str);
+  const searchLen = len(search);
+
+  for (let i = 0; i <= strLen - searchLen; i++) {
+    let j = 0;
+    while (j < searchLen && str[i + j] === search[j]) j++;
+    if (j === searchLen) return true;
+  }
+
+  return false;
+}
+
+    
+    import { includes } from './includes.js'
+
+describe('Тесты includes', () => {
+test('Должна вернуть true для подстроки в начале ', () => {
+expect(includes('hello','he')).toBe(true);
+    });
+
+test(' Должна вернуть true для подстроки в середине', () => {
+expect(includes('hello','ll')).toBe(true);
+    });
+
+test('Должна вернуть true для подстроки в конце', () => {
+expect(includes('hello','lo')).toBe(true);
+    });
+
+test('Должна вернуть false если подстрока не найдена', () => {
+expect(includes('hello','li')).toBe(false);
+    });
+
+test('Должна вернуть true для пустой поисковой строки', () => {
+expect(includes('hello','')).toBe(true);
+    });
+
+test('Должна вернуть false если поисковая строка длиннее исходной', () => {
+expect(includes('hello','hello!')).toBe(false);
+    });
+
+test('Должна вернуть true для одинаковых строк', () => {
+expect(includes('abc','abc')).toBe(true);
+    });
+
+test('Должна вернуть true при нескольких совпадениях', () => {
+expect(includes('ababa','ba')).toBe(true);
+    });
+
+test('Должна найти подстроку, которая начинается внутри предыдущего почти-совпадения', () => {
+expect(includes('abababc','ababc')).toBe(true);
+    });
+
+test('Должна вернуть true для поиска одного символа в начале', () => {
+expect(includes('hello','h')).toBe(true);
+    });
+
+test('Должна вернуть true для поиска символа в середине', () => {
+expect(includes('hello','l')).toBe(true);
+    });
+
+test('Должна вернуть true для поиска символа в конце', () => {
+expect(includes('hello','lo')).toBe(true);
+    });
+
+test('Должна работать с кириллицей', () => {
+expect(includes('привет','иве')).toBe(true);
+    });
+
+test('Должна выбросить TypeError если первый аргумент не строка', () => {
+expect(() => includes(123, 'hello')).toThrow(TypeError)
+});
+
+test('Должна выбросить TypeError если второй аргумент не строка', () => {
+expect(() => includes('hello', 123)).toThrow(TypeError)
+});
+
+})
+
+import { len } from './len.js';
+
+export function indexOf(str, search) {
+  if (typeof str !== 'string' || typeof search !== 'string') {
+    throw new TypeError('Аргументы должны быть строками!');
+  }
+
+  if (len(search) === 0) {
+    return 0;
+  }
+
+  const strLen = len(str);
+  const searchLen = len(search);
+
+  for (let i = 0; i <= strLen - searchLen; i++) {
+    let j = 0;
+
+    while (j < searchLen && str[i + j] === search[j]) {
+      j++;
+    }
+
+    if (j === searchLen) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+import { indexOf } from './index-of.js'
+
+describe('Тесты indexOf', () => {
+test('Должна вернуть 0 для подстроки в начале', () => {
+expect(indexOf('hello','he')).toBe(0);
+    });
+
+test('Должна вернуть 2 для подстроки в середине', () => {
+expect(indexOf('hello','ll')).toBe(2);
+    });
+
+test('Должна вернуть 3 для подстроки в конце', () => {
+expect(indexOf('hello','lo')).toBe(3);
+    });
+
+test('Должна вернуть -1 если подстрока не найдена', () => {
+expect(indexOf('hello','li')).toBe(-1);
+    });
+
+test('Должна вернуть 0 для пустой поисковой строки', () => {
+expect(indexOf('hello','')).toBe(0);
+    });
+
+test('Должна вернуть -1 если поисковая строка длиннее исходной', () => {
+expect(indexOf('hello','hello!')).toBe(-1);
+    });
+
+test('Должна вернуть 0 для одинаковых строк', () => {
+expect(indexOf('abc','abc')).toBe(0);
+    });
+
+test('Должна вернуть индекс первого вхождения при нескольких совпадениях', () => {
+expect(indexOf('ababa','ba')).toBe(1);
+    });
+
+test('Должна найти подстроку, которая начинается внутри предыдущего почти-совпадения', () => {
+expect(indexOf('abababc','ababc')).toBe(2);
+    });
+
+test('Должна вернуть 0 для поиска одного символа', () => {
+expect(indexOf('hello','h')).toBe(0);
+    });
+
+test('Должна вернуть 2 для поиска повторяющегося символа', () => {
+expect(indexOf('hello','l')).toBe(2);
+    });
+
+test('Должна работать с кириллицей', () => {
+expect(indexOf('привет','иве')).toBe(2);
+    });
+
+test('Должна выбросить TypeError если первый аргумент не строка', () => {
+expect(() => indexOf(123, 'hello')).toThrow(TypeError)
+});
+
+test('Должна выбросить TypeError если второй аргумент не строка', () => {
+expect(() => indexOf('hello', 123)).toThrow(TypeError)
+});
+
+})
+
+import { len } from './len.js';
+
+export function repeat(str, count) {
+  if (typeof str !== 'string') {
+  throw new TypeError('Первый аргумент должен быть строкой!');
+  }
+
+  if (count === undefined) {
+  return '';
+  }
+
+  if (typeof count !== 'number' || Number.isNaN(count)) {
+  throw new TypeError('Второй аргумент должен быть числом!');
+  }
+
+  if (count < 0) {
+  throw new RangeError('Количество повторений не может быть отрицательным!');
+  }
+
+  const times = count | 0;
+  if (times === 0 || len(str) === 0) {
+    return '';
+  }
+  
+  let result = '';
+  for (let i = 0; i < times; i++) {
+  result += str;
+  }
+  return result;
+}
+
+import { repeat } from './repeat.js';
+
+describe('Тесты repeat', () => {
+test('Должна повторить строку 3 раза: repeat("ab", 3) → "ababab"', () => {
+expect(repeat('ab', 3)).toBe('ababab');
+  });
+
+test('Должна вернуть исходную строку для count = 1: repeat("hello", 1) → "hello"', () => {
+expect(repeat('hello', 1)).toBe('hello');
+  });
+
+test('Должна вернуть "" для count = 0', () => {
+expect(repeat('a', 0)).toBe('');
+  });
+
+test('Должна вернуть "" для пустой исходной строки: repeat("", 5) → ""', () => {
+expect(repeat('', 5)).toBe('');
+  });
+
+test('Должна повторить один символ: repeat("x", 4) → "xxxx"', () => {
+expect(repeat('x', 4)).toBe('xxxx');
+  });
+
+test('Должна обрезать дробную часть: repeat("a", 2.7) → "aa"', () => {
+expect(repeat('a', 2.7)).toBe('aa');
+  });
+
+test('Должна вернуть "" для count < 1: repeat("a", 0.5) → ""', () => {
+expect(repeat('a', 0.5)).toBe('');
+  });
+
+test('Должна вернуть "", если count пропущен: repeat("a") → ""', () => {
+expect(repeat('a')).toBe('');
+  });
+
+test('Должна работать с кириллицей: repeat("да", 3) → "дадада"', () => {
+expect(repeat('да', 3)).toBe('дадада');
+  });
+
+test('Должна выбросить RangeError для отрицательного count: repeat("a", -1)', () => {
+expect(() => repeat('a', -1)).toThrow(RangeError);
+  });
+
+test('Должна выбросить TypeError, если count не число: repeat("a", "3")', () => {
+expect(() => repeat('a', '3')).toThrow(TypeError);
+  });
+
+test('Должна выбросить TypeError, если str не строка: repeat(123, 3)', () => {
+expect(() => repeat(123, 3)).toThrow(TypeError);
+  });
+
+});
+
+import { len } from './len.js';
+
+export function reverse (str) {
+  if (typeof str !== 'string') {
+    throw new TypeError('Аргумент должен быть строкой!');
+  }
+
+  const strLen = len(str);
+  let result = '';
+
+  for (let i = strLen - 1; i >= 0; i--) {
+    result += str[i];
+  }
+
+  return result;
+}
+import { reverse } from './reverse.js';
+
+describe('Тесты reverse', () => {
+test('Должна перевернуть строку: reverse("hello") → "olleh"', () => {
+expect(reverse('hello')).toBe('olleh');
+  });
+
+test('Должна вернуть пустую строку для пустого ввода: reverse("") → ""', () => {
+expect(reverse('')).toBe('');
+  });
+
+test('Должна вернуть тот же символ для строки из одного символа: reverse("a") → "a"', () => {
+expect(reverse('a')).toBe('a');
+  });
+
+test('Должна вернуть ту же строку для палиндрома: reverse("racecar") → "racecar"', () => {
+expect(reverse('racecar')).toBe('racecar');
+  });
+
+test('Должна корректно перевернуть строку с пробелами: reverse("a b c") → "c b a"', () => {
+expect(reverse('a b c')).toBe('c b a');
+  });
+
+test('Должна работать с кириллицей: reverse("привет") → "тевирп"', () => {
+expect(reverse('привет')).toBe('тевирп');
+  });
+
+test('Должна выбросить TypeError если аргумент не строка (123)', () => {
+expect(() => reverse(123)).toThrow(TypeError);
+  });
+
+test('Должна выбросить TypeError если аргумент null', () => {
+expect(() => reverse(null)).toThrow(TypeError);
+  });
+
+});
+
+import { len } from './len.js';
+
+export function startsWith(str, search) {
+  if (typeof str !== 'string' || typeof search !== 'string') {
+    throw new TypeError('Аргументы должны быть строками!');
+  }
+
+  if (search === '') {
+    return true;
+  }
+
+  const strLen = len(str);
+  const searchLen = len(search);
+
+  if (searchLen > strLen) {
+    return false;
+  }
+
+  for (let j = 0; j < searchLen; j++) {
+    if (str[j] !== search[j]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+import { startsWith } from './starts-with.js'
+
+describe('Тесты startsWith', () => {
+test('Должна вернуть true для одного символа', () => {
+expect(startsWith('hello','h')).toBe(true);
+    });
+
+test('Должна вернуть true для подстроки', () => {
+expect(startsWith('hello','hel')).toBe(true);
+    });
+
+test('Должна вернуть false для несовпадающего вхождения', () => {
+expect(startsWith('hello','el')).toBe(false);
+    });
+
+test('Должна вернуть true для пустой поисковой строки', () => {
+expect(startsWith('hello','')).toBe(true);
+    });
+
+test('Должна вернуть false если поисковая строка длиннее', () => {
+expect(startsWith('hell','hello')).toBe(false);
+    });
+
+test('Должна вернуть true для точного совпадения', () => {
+expect(startsWith('abc','abc')).toBe(true);
+    });
+
+test('Должна выбросить TypeError если первый аргумент не строка', () => {
+expect(() => startsWith(123, 'hello')).toThrow(TypeError)
+    });
+
+test('Должна выбросить TypeError если второй аргумент не строка', () => {
+expect(() => startsWith('hello', 123)).toThrow(TypeError)
+    });
+
+})
+
